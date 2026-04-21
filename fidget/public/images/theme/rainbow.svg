@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480">
+  <defs>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+  <!-- Simple rainbow arcs (placeholder) -->
+  <g filter="url(#soft)" fill="none" stroke-linecap="round">
+    <path d="M130,420 C260,140 940,140 1070,420" stroke="#FF5B5B" stroke-width="48"/>
+    <path d="M180,420 C300,170 900,170 1020,420" stroke="#FFB14A" stroke-width="48"/>
+    <path d="M230,420 C340,200 860,200 970,420" stroke="#FFD34A" stroke-width="48"/>
+    <path d="M280,420 C380,230 820,230 920,420" stroke="#63E37A" stroke-width="48"/>
+    <path d="M330,420 C420,260 780,260 870,420" stroke="#2AA7FF" stroke-width="48"/>
+    <path d="M380,420 C460,290 740,290 820,420" stroke="#7B4DFF" stroke-width="48"/>
+  </g>
+</svg>

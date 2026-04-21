@@ -1,0 +1,121 @@
+# PHP-FPM 8.4
+FROM php:8.4-fpm
+
+ARG APP_USER=www-data
+ARG APP_GROUP=www-data
+
+WORKDIR /var/www
+
+# System deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential pkg-config \
+    libpng-dev libjpeg62-turbo-dev libfreetype6-dev libwebp-dev \
+    libonig-dev libicu-dev libxml2-dev libzip-dev \
+    libpq-dev libsodium-dev zlib1g-dev \
+    curl unzip git libcurl4-openssl-dev libssl-dev \
+    postgresql-client procps inotify-tools ca-certificates \
+    nginx supervisor \
+ && rm -rf /var/lib/apt/lists/*
+
+# -----------------------------
+# Node.js 20 (added)
+# -----------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && apt-get update && apt-get install -y --no-install-recommends nodejs \
+ && rm -rf /var/lib/apt/lists/*
+
+# PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+ && docker-php-ext-install -j"$(nproc)" gd intl pdo_pgsql pgsql mbstring exif pcntl bcmath zip soap
+
+# Redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_HOME=/tmp/composer-cache
+
+# Create log/run dirs and make them writable
+RUN mkdir -p /usr/local/var/log /usr/local/var/run /run/php /tmp/php-opcache \
+ && chown -R ${APP_USER}:${APP_GROUP} /usr/local/var/log /usr/local/var/run /run/php /tmp/php-opcache
+
+# Minimal php.ini baseline
+RUN { \
+      echo "error_reporting=E_ALL"; \
+      echo "display_errors=On"; \
+      echo "memory_limit=512M"; \
+      echo "realpath_cache_size=4096k"; \
+      echo "realpath_cache_ttl=600"; \
+      echo "soap.wsdl_cache_enable=1"; \
+      echo "soap.wsdl_cache_dir=/tmp"; \
+   } > /usr/local/etc/php/conf.d/00-basics.ini
+
+# Copy OPcache & FPM pool configs
+COPY zz-opcache.ini /usr/local/etc/php/conf.d/zz-opcache.ini
+COPY zz-www.conf    /usr/local/etc/php-fpm.d/zz-www.conf
+
+# -------------------------------------------------
+# Nginx + Supervisor configs
+# IMPORTANT: only load nginx config from conf.d (avoid duplicate server blocks)
+# -------------------------------------------------
+RUN rm -f /etc/nginx/conf.d/default.conf \
+          /etc/nginx/sites-enabled/default \
+          /etc/nginx/sites-available/default \
+          /etc/nginx/sites-enabled/default.conf \
+          /etc/nginx/sites-available/default.conf || true
+
+COPY nginx-internal.conf /etc/nginx/conf.d/default.conf
+
+# PHP-FPM logging to stdout/stderr
+RUN { \
+      echo "[global]"; \
+      echo "error_log = /proc/self/fd/2"; \
+      echo ""; \
+      echo "[www]"; \
+      echo "access.log = /proc/self/fd/1"; \
+      echo "decorate_workers_output = no"; \
+   } > /usr/local/etc/php-fpm.d/zzz-logging.conf
+
+# Safety for encoded builds
+RUN { \
+      echo "opcache.file_cache="; \
+   } > /usr/local/etc/php/conf.d/zzz-sg-safety.ini
+
+# Copy composer files first
+COPY --chown=${APP_USER}:${APP_GROUP} composer.json composer.lock* ./
+USER root
+RUN git config --global --add safe.directory /var/www || true
+
+# -----------------------------
+# Node deps (added, cached)
+# -----------------------------
+COPY package.json package-lock.json* ./
+RUN if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+# Copy the app
+COPY --chown=${APP_USER}:${APP_GROUP} . .
+
+# -----------------------------
+# Build frontend assets (added)
+# -----------------------------
+#RUN npm run build
+
+# Ensure Laravel writable dirs exist
+RUN mkdir -p storage bootstrap/cache \
+ && chmod -R ug+rwX storage bootstrap/cache
+
+EXPOSE 8000
+EXPOSE 8081
+
+# ------------------------------------------------
+# Entrypoints
+# ------------------------------------------------
+COPY --chown=${APP_USER}:${APP_GROUP} entrypoint.local.sh /usr/local/bin/entrypoint.sh
+#COPY --chown=${APP_USER}:${APP_GROUP} entrypoint-generate-and-store.sh /usr/local/bin/entrypoint-generate-and-store.sh
+#COPY --chown=${APP_USER}:${APP_GROUP} entrypoint-restore-secrets.sh /usr/local/bin/entrypoint-restore-secrets.sh
+
+#RUN chmod +x /usr/local/bin/entrypoint-generate-and-store.sh
+#RUN #chmod +x /usr/local/bin/entrypoint-restore-secrets.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

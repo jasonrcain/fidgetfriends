@@ -1,0 +1,384 @@
+/* Bootstrap + icons */
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* Fun font (matches the mockup vibe reasonably well) */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&display=swap');
+
+:root {
+  /* Bootstrap brand overrides */
+  --bs-primary: var(--ff-sky-2);
+  --bs-primary-rgb: 42, 167, 255;
+
+  --ff-sky-1: #6bd0ff;
+  --ff-sky-2: #2aa7ff;
+  --ff-cloud: rgba(255, 255, 255, 0.92);
+  --ff-ink: #18324a;
+
+  --ff-orange-1: #ffb14a;
+  --ff-orange-2: #ff6a00;
+
+  --ff-purple: #7b4dff;
+  --ff-pink: #ff5fb1;
+  --ff-yellow: #ffd34a;
+
+  --ff-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  --ff-soft-shadow: 0 10px 20px rgba(0, 0, 0, 0.10);
+
+  --ff-radius-xl: 28px;
+  --ff-radius-lg: 22px;
+  --ff-radius-md: 18px;
+}
+
+html, body { height: 100%; }
+
+.ff-body {
+  font-family: "Fredoka", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ff-ink);
+
+  /* Sky + texture (placeholder texture is in public/images/theme/sky-texture.png) */
+  background-image:
+    url("/images/theme/sky-texture.png");
+  background-repeat: repeat, no-repeat, no-repeat;
+background-color: rgb(87, 196, 255);
+  min-height: 100%;
+}
+
+/* Layout */
+.ff-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ff-main { min-height: 40vh; }
+
+/* Bubble-ish brand text (used in footer; header uses logo.svg) */
+.ff-brand__fidget,
+.ff-brand__friendz {
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.12);
+}
+.ff-brand__fidget {
+  color: var(--ff-yellow);
+  -webkit-text-stroke: 2px rgba(15, 40, 70, 0.25);
+}
+.ff-brand__friendz {
+  color: var(--ff-pink);
+  -webkit-text-stroke: 2px rgba(15, 40, 70, 0.25);
+}
+
+
+/* Cloud-style panels */
+.ff-cloud-panel,
+.ff-hero-shell {
+  background: var(--ff-cloud);
+  border-radius: var(--ff-radius-xl);
+  box-shadow: var(--ff-shadow);
+  border: 1px solid rgba(255,255,255,0.55);
+  position: relative;
+}
+
+/* ------------------------------------------------------------
+   Illustrated header (fast approach: asset-backed)
+   Replace /public/images/theme/* with your real exported artwork
+------------------------------------------------------------ */
+.ff-site-header {
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
+}
+
+.ff-site-header__top {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr minmax(240px, 680px) 1fr;
+  align-items: end;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.ff-site-header__logo-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 140px;
+}
+
+.ff-site-header__logo-link { display: inline-block; }
+
+.ff-site-header__rainbow {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  transform: translateX(-50%);
+  width: min(760px, 100%);
+  height: auto;
+  opacity: 0.95;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ff-site-header__logo {
+  width: min(660px, 100%);
+  height: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.ff-site-header__mascot {
+  width: 150px;
+  height: auto;
+  align-self: end;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ff-site-header__mascot--left { justify-self: start; }
+.ff-site-header__mascot--right { justify-self: end; }
+
+@media (max-width: 767.98px) {
+  .ff-site-header__top {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+  .ff-site-header__mascot { display: none; }
+  .ff-site-header__logo-wrap { min-height: 120px; }
+  .ff-site-header__rainbow { top: 18%; width: 100%; }
+}
+
+/* Cloud nav row */
+.ff-cloud-nav {
+  background-image: url("/images/theme/cloud-strip.svg");
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  box-shadow: var(--ff-soft-shadow);
+}
+
+.ff-cloud-nav .navbar-nav { text-align: center; }
+
+.ff-navlink {
+  border-radius: 999px;
+    font-size: xx-large;
+  font-weight: 800;
+  padding: 0.55rem 0.95rem !important;
+  color: rgba(24, 50, 74, 0.92) !important;
+  /*  color: #57C4FF !important;*/
+}
+
+.router-link-active.ff-navlink,
+.router-link-exact-active.ff-navlink {
+  background: rgba(0, 120, 255, 0.12);
+}
+
+/* ------------------------------------------------------------
+   Headings (wood sign / ribbon / cloud title)
+------------------------------------------------------------ */
+.ff-wood-sign,
+.ff-ribbon,
+.ff-cloud-title {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: min(920px, 100%);
+  max-width: 100%;
+}
+
+.ff-wood-sign__bg,
+.ff-ribbon__bg,
+.ff-cloud-title__bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ff-wood-sign__content,
+.ff-ribbon__content,
+.ff-cloud-title__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.14);
+}
+
+.ff-wood-sign__content {
+  color: #fff;
+  -webkit-text-stroke: 2px rgba(15,40,70,0.25);
+}
+
+.ff-ribbon__content {
+  color: #ffd34a;
+  -webkit-text-stroke: 2px rgba(15,40,70,0.30);
+}
+
+.ff-cloud-title__content {
+  color: #ff5fb1;
+  -webkit-text-stroke: 2px rgba(15,40,70,0.20);
+}
+
+.ff-wood-sign--sm .ff-wood-sign__content,
+.ff-ribbon--sm .ff-ribbon__content,
+.ff-cloud-title--sm .ff-cloud-title__content {
+  font-size: clamp(1.1rem, 3.4vw, 1.6rem);
+}
+
+.ff-wood-sign--md .ff-wood-sign__content,
+.ff-ribbon--md .ff-ribbon__content,
+.ff-cloud-title--md .ff-cloud-title__content {
+  font-size: clamp(1.25rem, 3.8vw, 2.05rem);
+}
+
+.ff-wood-sign--lg .ff-wood-sign__content,
+.ff-ribbon--lg .ff-ribbon__content,
+.ff-cloud-title--lg .ff-cloud-title__content {
+  font-size: clamp(1.45rem, 4.6vw, 2.45rem);
+}
+
+/* ------------------------------------------------------------
+   Hero
+------------------------------------------------------------ */
+.ff-hero-title {
+  font-weight: 900;
+  font-size: clamp(1.6rem, 4.6vw, 3rem);
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 0 rgba(0,0,0,0.10);
+}
+
+.ff-hero-subtitle {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: rgba(24, 50, 74, 0.85);
+}
+
+/* Buttons */
+.ff-btn-cta {
+  border: 0;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ff-orange-1), var(--ff-orange-2));
+  color: #fff;
+  box-shadow: 0 10px 0 rgba(0,0,0,0.10);
+  transition: transform .08s ease, filter .08s ease;
+}
+
+.ff-btn-cta:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+.ff-btn-cta:active { transform: translateY(1px); }
+
+.ff-muted { color: rgba(24, 50, 74, 0.75); }
+
+/* ------------------------------------------------------------
+   Product cards (Shop grid + Popular row)
+------------------------------------------------------------ */
+.ff-product-card {
+  border-radius: 26px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: var(--ff-soft-shadow);
+  overflow: hidden;
+
+  /* thick white frame + subtle sky outline (like your mockups) */
+  border: 3px solid rgba(255,255,255,0.95);
+  outline: 3px solid rgba(42,167,255,0.20);
+  outline-offset: -3px;
+}
+
+.ff-product-card__image {
+  padding: 0.8rem;
+}
+
+.ff-product-card__image img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 18px;
+}
+
+@media (min-width: 992px) {
+  .ff-product-card__image img { height: 210px; }
+}
+
+.ff-product-card__body {
+  background: rgba(255,255,255,0.90);
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.ff-card-title { font-weight: 900; margin: 0; }
+
+
+/* Generic image card (used on About page) */
+.ff-card {
+  border-radius: var(--ff-radius-lg);
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: var(--ff-soft-shadow);
+  overflow: hidden;
+  background: rgba(255,255,255,0.95);
+}
+.ff-card img { width: 100%; height: auto; display: block; }
+
+/* ------------------------------------------------------------
+   Shop filters
+------------------------------------------------------------ */
+.ff-tab {
+  border-radius: 999px;
+  border: 2px solid rgba(42, 167, 255, 0.35);
+  background: rgba(255,255,255,0.85);
+  color: rgba(24, 50, 74, 0.92);
+  padding-inline: 0.9rem;
+}
+
+.ff-tab:hover { filter: brightness(1.02); }
+
+.ff-tab--active {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(180deg, var(--ff-sky-1), var(--ff-sky-2));
+  box-shadow: 0 8px 0 rgba(0,0,0,0.08);
+}
+
+.ff-search .form-control,
+.ff-search .input-group-text {
+  border-radius: 999px;
+}
+
+.ff-search .input-group-text { border-right: 0; }
+.ff-search .form-control { border-left: 0; }
+
+/* Footer */
+.ff-footer {
+  margin-top: auto;
+  padding: 2.25rem 0;
+  color: rgba(255,255,255,0.92);
+  background: linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.20));
+}
+
+.ff-footer a {
+  color: rgba(255,255,255,0.95);
+  text-decoration: none;
+}
+
+.ff-footer .ff-social-a {
+    color: #000;
+    text-decoration: none;
+}
+
+.ff-footer a:hover { text-decoration: underline; }
+
+
+.heart {
+    color: #e74c3c; /* Red color for the heart */
+}

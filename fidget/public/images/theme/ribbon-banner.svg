@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220">
+  <defs>
+    <linearGradient id="rib" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#2AA7FF"/>
+      <stop offset="1" stop-color="#167EE6"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-40%" width="140%" height="180%">
+      <feDropShadow dx="0" dy="14" stdDeviation="10" flood-color="#000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+
+  <!-- Ribbon banner background (placeholder) -->
+  <g filter="url(#shadow)">
+    <path d="M120 65 H1080 L1160 110 L1080 155 H120 L40 110 Z"
+          fill="url(#rib)" stroke="#0B4F99" stroke-width="10" stroke-linejoin="round"/>
+    <g opacity="0.25" fill="#fff">
+      <path d="M190 85 H1010 V105 H190 Z"/>
+    </g>
+  </g>
+</svg>

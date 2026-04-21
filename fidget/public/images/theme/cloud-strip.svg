@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="220" viewBox="0 0 1400 220">
+  <defs>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <!-- Cloud strip background for nav (placeholder) -->
+  <g filter="url(#shadow)">
+    <path d="M90,150
+             C80,110 110,80 150,85
+             C165,45 220,35 250,70
+             C280,35 345,35 370,75
+             C410,55 460,70 470,105
+             C520,75 580,85 590,125
+             C640,90 705,90 725,130
+             C760,95 835,100 850,140
+             C885,110 950,115 965,150
+             C995,125 1045,135 1055,160
+             C1090,140 1135,150 1145,175
+             C1190,160 1240,170 1265,190
+             H90
+             Z"
+          fill="rgba(255,255,255,0.95)" stroke="rgba(255,255,255,0.75)" stroke-width="6" />
+  </g>
+</svg>
